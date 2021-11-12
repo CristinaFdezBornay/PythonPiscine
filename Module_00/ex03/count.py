@@ -1,4 +1,3 @@
-import sys
 from string import punctuation
 from typing import Iterable
 
