@@ -30,7 +30,6 @@ if __name__ == "__main__":
     secret_number: int = randint(1, 99)
     trials: int = 0
     guess: int = -1
-    print(secret_number)
     while guess != secret_number:
         guess = get_guess()
         if guess > secret_number:
