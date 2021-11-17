@@ -1,3 +1,4 @@
+import sys
 
 class Recipe(object):
     def __init__(self, name, cooking_lvl, cooking_time, ingredients, recipe_type, description=""):
@@ -7,6 +8,11 @@ class Recipe(object):
         self.ingredients = ingredients
         self.description = description
         self.recipe_type = recipe_type
+        try:
+            self._verify_input()
+        except Exception as e:
+            print(e)
+            sys.exit()
 
     def _verify_input(self):
         if type(self.name) != str:
@@ -27,11 +33,8 @@ class Recipe(object):
         txt = "Recipe for {}".format(self.name)
         if self.description != "":
             txt = txt + ": {}".format(self.description)
-        txt = txt + "\nTo be eaten for {}\n".format(self.recipe_type)
-        txt = txt + "\nCooking level: {}".format(self.cooking_lvl)
-        txt = txt + "\nTakes {} minutes for cooking".format(self.cooking_time)
+        txt = txt + "\nThis is a {} recipe ".format(self.recipe_type)
+        txt = txt + "| Difficulty: {} ".format(self.cooking_lvl)
+        txt = txt + "| Prep time: {} minutes".format(self.cooking_time)
         txt = txt + "\nIngredients list: {}".format(self.ingredients)
         return txt
-
-quiche = Recipe("quiche", 2, 35, ['puff pastry', 'eggs', 'leeks'], 'lunch', 'light lunch')
-print(str(quiche))
