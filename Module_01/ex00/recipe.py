@@ -1,7 +1,5 @@
-import sys
-
 class Recipe(object):
-    def __init__(self, name, cooking_lvl, cooking_time, ingredients, recipe_type, description=""):
+    def __init__(self, name=None, cooking_lvl=None, cooking_time=None, ingredients=None, recipe_type=None, description=""):
         self.name = name
         self.cooking_lvl = cooking_lvl
         self.cooking_time = cooking_time
@@ -12,7 +10,6 @@ class Recipe(object):
             self._verify_input()
         except Exception as e:
             print(e)
-            sys.exit()
 
     def _verify_input(self):
         if type(self.name) != str:
