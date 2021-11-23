@@ -97,9 +97,8 @@ class Bank(object):
         @account: int(id) or str(name) of the account
         @return True if success, False if an error occured
         """
+        print("Fixing account \n{}".format(account))
         keys_to_change = {}
-        if len(account.__dict__) % 2 == 0:
-            setattr(account, 'placeholder', 0)
         for attribute in account.__dict__.keys():
             if re.search("^b", attribute):
                 new_key = attribute[1:]
@@ -118,15 +117,7 @@ class Bank(object):
                     setattr(account, attribute, 00000)
                 if attribute == 'addr':
                     setattr(account, attribute, 'No address')
-        print("Fixed Account to \n{}\nTrying to add again to bank".format(str(account)))
-
-account = Account("Account1", value=0, zip=95130, addr='20 rue jeanne darc')
-account2 = Account("Account2", value=100, btest=13)
-account.transfer(500)
-
-print(account)
-print(account2)
-
-bank = Bank()
-bank.add(account)
-bank.add(account2)
+        if len(account.__dict__) % 2 == 0:
+            setattr(account, 'placeholder', 0)
+        print("Attempting to add fixed account to the bank \n{}".format(str(account)))
+        self.add(account)
