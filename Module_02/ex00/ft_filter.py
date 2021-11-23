@@ -16,9 +16,7 @@ def ft_filter(function_to_apply, iterable):
     """
     if callable(function_to_apply) == False:
         raise TypeError("'{}' object is not callable".format(type(function_to_apply).__name__))
-        return None
     elif not hasattr(iterable, '__iter__'):
         raise TypeError("'{}' object is not iterable".format(type(iterable).__name__))
-        return None
     else:
         return function_filter(function_to_apply, iterable)
