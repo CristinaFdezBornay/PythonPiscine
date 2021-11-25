@@ -3,8 +3,8 @@ import csv
 from typing import List, Union
 
 class CsvReader():
-    __slots__= ('filename', 'sep', 'header_bool', 'skip_top', 'skip_bottom',
-                'csvfile_obj', 'csvfile_reader', 'header', 'data', 'nbr_fields', 'exception')
+    __slots__= ('filename', 'sep', 'header_bool', 'skip_top', 'skip_bottom', 'csvfile_obj',
+                'csvfile_reader', 'header', 'data', 'nbr_fields', 'len_records', 'exception')
 
     def __init__(self, filename:str=None, sep:str=',', header:bool=False, skip_top:int=0, skip_bottom:int=0) -> None:
         self.filename = filename
@@ -17,6 +17,7 @@ class CsvReader():
         self.header = None
         self.data = None
         self.nbr_fields = False
+        self.len_records = []
         self.exception = False
 
     def __enter__(self) -> Union[CsvReader, None]:
@@ -27,15 +28,41 @@ class CsvReader():
         except Exception as exception:
             self.exception = True
             self.__exit__(type=exception.__class__.__name__, value=exception, traceback=exception.__traceback__)
-            return None
+            exit()
 
     def __exit__(self, type:str=None, value:Exception=None, traceback=None) -> None:
         if self.exception == True:
             if traceback:
-                print("Traceback:\n{}".format(traceback))
+                self.__print_traceback__(traceback)
             print("[{}] {}".format(type if type else "ERROR", value if value else ""))
-            return
         self.csvfile_obj.close()
+
+    def __print_traceback__(self, traceback) -> (str, str, str):
+        tb_splitted = traceback.tb_frame.__str__().strip('<>').split(', ')
+        file = str.capitalize(tb_splitted[1])
+        line = str.capitalize(tb_splitted[2])
+        code = str.capitalize(tb_splitted[3])
+        print("Traceback (most recent call last):")
+        print("\t{}, {}, {}".format(file, line, code))
+
+    def __set_params__(self, row):
+        raw_data = []
+        self.nbr_fields = len(row)
+        if self.header_bool:
+            self.header = row
+            next_row = next(self.csvfile_reader)
+            self.len_records = list(len(record) for record in next_row)
+            raw_data.append(next_row)
+        else:
+            self.len_records = list(len(record) for record in row)
+            raw_data.append(row)
+        return raw_data
+
+    def __check_row_corrupted__(self, row):
+        if len(row) != self.nbr_fields:
+            return True
+        if (self.len_records != list(len(record) for record in row)):
+            return True
 
     def getdata(self) -> Union(List, None):
         """ Retrieves the data/records from skip_top to skip bottom.
@@ -43,18 +70,13 @@ class CsvReader():
         nested list(list(list, list, ...)) representing the data.
         """
         try:
-            i = 0
-            raw_data = []
-            for row in self.csvfile_reader:
+            for i, row in enumerate(self.csvfile_reader):
                 if i == 0:
-                    self.nbr_fields = len(row)
-                    if self.header_bool:
-                        self.header = row
-                elif len(row) != self.nbr_fields:
+                    raw_data = self.__set_params__(row)
+                elif self.__check_row_corrupted__(row) == True:
                     raise ValueError("The file is corrupted")
                 else:
                     raw_data.append(row)
-                i += 1
             self.data = list(map(list, zip(*raw_data)))
             return self.data
         except Exception as exception:
