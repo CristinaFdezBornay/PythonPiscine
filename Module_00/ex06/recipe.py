@@ -9,7 +9,7 @@ def init_cookbook():
 
 def print_recipe(recipe_name):
     if recipe_name in cookbook.keys():
-        recipe = "Recipe for {recipe_name}:\nIngredients list: {ingredients}\nTo be eaten for {meal}\nTakes {prep_time} for cooking.".format(recipe_name=recipe_name, ingredients=cookbook[recipe_name]['ingredients'], meal=cookbook[recipe_name]['meal'], prep_time=cookbook[recipe_name]['prep_time'])
+        recipe = "Recipe for {recipe_name}:\nIngredients list: {ingredients}\nTo be eaten for {meal}\nTakes {prep_time} minutes for cooking.".format(recipe_name=recipe_name, ingredients=cookbook[recipe_name]['ingredients'], meal=cookbook[recipe_name]['meal'], prep_time=cookbook[recipe_name]['prep_time'])
         print(recipe)
     else:
         print("Couldn't find the {} recipe in the cookbook. Make sure you give an existing recipe to print.".format(recipe_name))
