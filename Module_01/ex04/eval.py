@@ -1,22 +1,26 @@
 class Evaluator(object):
     @staticmethod
-    def zip_evaluate(coefs, words):
-        if type(coefs) != list or type(words) != list or len(coefs) != len(words):
+    def zip_evaluate(coefficients, words):
+        if not isinstance(coefficients, list) \
+           or not isinstance(words, list) or len(coefficients) != len(words):
             return -1
         out = 0
-        for coef, word in zip(coefs, words):
-            if type(word) != str or (type(coef) != float and type(coef) != int):
+        for coefficient, word in zip(coefficients, words):
+            if not isinstance(word, str) \
+               or (not isinstance(coefficient, float) and not isinstance(coefficient, int)):
                 return -1
-            out += coef * len(word)
+            out += coefficient * len(word)
         return out
 
     @staticmethod
-    def enumerate_evaluate(coefs, words):
-        if type(coefs) != list or type(words) != list or len(coefs) != len(words):
+    def enumerate_evaluate(coefficients, words):
+        if not isinstance(coefficients, list) \
+           or not isinstance(words, list) or len(coefficients) != len(words):
             return -1
         out = 0
-        for index, coef in enumerate(coefs):
-            if type(words[index]) != str or (type(coef) != float and type(coef) != int):
+        for index, coefficient in enumerate(coefficients):
+            if not isinstance(words[index], str) \
+               or (not isinstance(coefficient, float) and not isinstance(coefficient, int)):
                 return -1
-            out += len(words[index]) * coef
+            out += len(words[index]) * coefficient
         return out

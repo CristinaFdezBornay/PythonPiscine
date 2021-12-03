@@ -10,12 +10,12 @@ class Stark(GotCharacter):
         super().__init__(first_name=first_name, is_alive=is_alive)
         self.family_name = "Stark"
         self.house_words = "Winter is Coming"
-    
+
     def print_house_words(self) -> None:
         print(self.house_words)
-    
+
     def die(self) -> None:
-        print("-> {}.die()".format(self.first_name))
+        print("-> {self.first_name}.die()")
         self.is_alive = False
 
 if __name__ == "__main__":
@@ -24,7 +24,7 @@ if __name__ == "__main__":
     print(Arya.__dict__)
     print("-> Arya.print_house_words()")
     Arya.print_house_words()
-    print("-> Arya.is_alive : {}".format(Arya.is_alive))
+    print(f"-> Arya.is_alive : {Arya.is_alive}")
     Arya.die()
-    print("-> Arya.is_alive : {}".format(Arya.is_alive))
-    print("-> Arya.__doc__  : {}".format(Arya.__doc__))
+    print(f"-> Arya.is_alive : {Arya.is_alive}")
+    print(f"-> Arya.__doc__  : {Arya.__doc__}")

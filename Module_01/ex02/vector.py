@@ -1,36 +1,43 @@
 class Vector(object):
     def __new__(cls, input):
         """Verify input type before creating class object"""
-        if type(input) == tuple:
+        if isinstance(input, tuple):
             if len(input) > 2:
-                print(ValueError("Input error: Vector initialization with range invalid. Please make sure your range is of size 2"))
+                print(ValueError("""Input error: Vector initialization with range invalid.
+                                    Please make sure your range is of size 2"""))
                 return None
-            elif type(input[0]) != int or type(input[1]) != int:
-                print(ValueError("Input error: Vector initialization with range invalid. Please make sure range limits are of int type"))
-                return None 
-        elif type(input) == list:
+            elif not isinstance(input[0], int) or not isinstance(input[1], int):
+                print(ValueError("""Input error: Vector initialization with range invalid.
+                                    Please make sure range limits are of int type"""))
+                return None
+        elif isinstance(input, list):
             vec_type = None
             for value in input:
-                if type(value) == list and vec_type == None:
+                if isinstance(value, list) and vec_type is None:
                     vec_type = "column"
-                elif type(value) == float and vec_type == None:
+                elif isinstance(value, float) and vec_type is None:
                     vec_type = "row"
-                elif vec_type == None:
-                    print(TypeError("Input error: Invalid type. Please make sure you give an array of array of floats for column vectors, or array of floats for row vectors"))
+                elif vec_type is None:
+                    print(TypeError("""Input error: Invalid type.
+                                       Please make sure you give an array of array of floats
+                                       for column vectors, or array of floats for row vectors"""))
                     return None
-                if type(value) != list and vec_type == "column":
-                    print(TypeError("Input error: Your vector is inconsistent. For column vector, please make sure you give a list of lists of floats"))
+                if not isinstance(value, list) and vec_type == "column":
+                    print(TypeError("""Input error: Your vector is inconsistent. For column vector,
+                                       please make sure you give a list of lists of floats"""))
                     return None
-                elif type(value) == list and vec_type == "row":
-                    print(TypeError("Input error: Your vector is inconsistent. For row vector, please make sure you give a list of floats"))
+                elif isinstance(value, list) and vec_type == "row":
+                    print(TypeError("""Input error: Your vector is inconsistent. For row vector,
+                                       please make sure you give a list of floats"""))
                 if vec_type == "column":
-                    # column vector
                     for val in value:
-                        if type(val) != float:
-                            print(TypeError("Input error: Vector values (column or row vector ) must be floats"))
+                        if isinstance(val, float):
+                            print(TypeError("""Input error: Vector values (column or row vector)
+                                               must be floats"""))
                             return None
-        elif type(input) != int:
-            print(TypeError("Input error: Please make sure your input is either a vector size (int), a size range (tuple) or an array"))
+        elif not isinstance(input, int):
+            print(TypeError("""Input error: Please make sure your input is either a vector size
+                               (int), a size range (tuple) or an array"""))
             return None
         return super(Vector, cls).__new__(cls)
 
@@ -39,15 +46,15 @@ class Vector(object):
         self.values = []
         self.type = None
         try:
-            if type(self.input) == int:
+            if isinstance(self.input, int):
                 self.values = self._get_vector_by_size()
-            elif type(self.input) == tuple:
+            elif isinstance(self.input, tuple):
                 self.values = self._get_vector_by_range()
-            elif type(self.input) == list:
+            elif isinstance(self.input, list):
                 self.values = self._get_row_column_vector()
             self.shape = self._get_shape()
-        except Exception as e:
-            print(e)
+        except Exception as exception:
+            print(exception)
 
     def _get_vector_by_size(self):
         """Initialize vector of size input"""
@@ -69,9 +76,9 @@ class Vector(object):
         """Initialize either row (array of floats) or column vector (array of array of floats)"""
         values = []
         for value in self.input:
-            if type(value) == list and self.type == None:
+            if isinstance(value, list) and self.type is None:
                 self.type = "column"
-            elif type(value) == float and self.type == None:
+            elif isinstance(value, float) and self.type is None:
                 self.type = "row"
             if self.type == "column":
                 for val in value:
@@ -92,17 +99,19 @@ class Vector(object):
         """add : only vectors of same dimensions."""
         if isinstance(other, Vector):
             if self.shape != other.shape:
-                print("Shape error: Cannot add a vector of shape {} to a vector of shape {}".format(self.shape, other.shape))
+                print(f"""Shape error: Cannot add a vector of shape {self.shape}
+                          to a vector of shape {other.shape}.""")
             else:
                 ret = []
-                for i in range(len(self.values)):
+                for i in enumerate(self.values):
                     if self.type == "column":
                         ret.append([self.values[i][0] + other.values[i][0]])
                     else:
                         ret.append(self.values[i] + other.values[i])
                 return Vector(ret)
         else:
-            print("Type error: Please make sure both types are Vector instances. Cannot add a {} type to {} type".format(type(self), type(other)))
+            print(f"""Type error: Please make sure both types are Vector instances.
+                      Cannot add a {type(self)} type to {type(other)} type""")
 
     def __radd__(self, other):
         """add : only vectors of same dimensions."""
@@ -112,18 +121,20 @@ class Vector(object):
         """sub : only vectors of same dimensions."""
         if isinstance(other, Vector):
             if self.shape != other.shape:
-                print(ValueError("Shape error: cannot add a vector of shape {} to a vector of shape {}".format(self.shape, other.shape)))
+                print(ValueError(f"""Shape error: cannot add a vector of shape {self.shape}
+                                     to a vector of shape {other.shape}"""))
                 return None
             else:
                 ret = []
-                for i in range(len(self.values)):
+                for i in enumerate(self.values):
                     if self.type == "column":
                         ret.append([self.values[i][0] - other.values[i][0]])
                     else:
                         ret.append(self.values[i] - other.values[i])
                 return Vector(ret)
         else:
-            print(ValueError("Type error: Please make sure both types are Vector instances. Cannot substract a {} type to {} type".format(type(self), type(other))))
+            print(ValueError(f"""Type error: Please make sure both types are Vector instances.
+                                 Cannot substract a {type(self)} type to {type(other)} type"""))
             return None
 
     def __rsub__(self, other):
@@ -137,14 +148,16 @@ class Vector(object):
             if other == 0 or other == 0.0:
                 print(ValueError("Value error: Cannot divide vector by 0"))
                 return None
-            for i in range(len(self.values)):
+            for i in enumerate(self.values):
                 if self.type == "column":
                     ret.append([self.values[i][0] / other])
                 else:
                     ret.append(self.values[i] / other)
             return Vector(ret)
         else:
-            print(ValueError("Type error: Please make sure you are dividing a Vector instance with a scalar value. Cannot divide a {} type to {} type".format(type(self), type(other))))
+            print(ValueError(f"""Type error: Please make sure you are dividing a Vector
+                                 instance with a scalar value.
+                                 Cannot divide a {type(self)} type to {type(other)} type"""))
             return None
 
     def __rtruediv__(self, other):
@@ -155,14 +168,16 @@ class Vector(object):
         """mul : only scalars."""
         if isinstance(other, int) or isinstance(other, float):
             ret = []
-            for i in range(len(self.values)):
+            for i in enumerate(self.values):
                 if self.type == "column":
                     ret.append([self.values[i][0] * other])
                 else:
                     ret.append(self.values[i] * other)
             return Vector(ret)
         else:
-            print(ValueError("Type error: Please make sure you are multiplying a Vector instance with a scalar value. Cannot multiply a {} type to {} type".format(type(self), type(other))))
+            print(ValueError(f"""Type error: Please make sure you are multiplying a Vector
+                                 instance with a scalar value.
+                                 Cannot multiply a {type(self)} type to {type(other)} type"""))
             return None
 
     def __rmul__(self, other):
@@ -170,11 +185,11 @@ class Vector(object):
         return self.__mul__(other)
 
     def __str__(self):
-        txt = """Vector({})""".format(self.values)
+        txt = f"Vector({self.values})"
         return txt
 
     def __repr__(self):
-        txt = """Vector({})""".format(self.values)
+        txt = f"Vector({self.values})"
         return txt
 
     def T(self):
@@ -192,15 +207,17 @@ class Vector(object):
         """Performs dot product between two vectors of same shape. Returns scalar"""
         if isinstance(other, Vector):
             if self.shape != other.shape:
-                print(ValueError("Shape error: cannot dot product a vector of shape {} with a vector of shape {}".format(self.shape, other.shape)))
+                print(ValueError(f"""Shape error: cannot dot product a vector of shape
+                                     {self.shape} with a vector of shape {other.shape}"""))
                 return None
             else:
                 ret = 0
-                for i in range(len(self.values)):
+                for i in enumerate(self.values):
                     if self.type == "column":
                         ret += self.values[i][0] * other.values[i][0]
                     else:
                         ret += self.values[i] * other.values[i]
                 return ret
         else:
-            return TypeError("Type error: Please make sure argument is a Vector instance. Cannot perform dot product between a Vector and {}".format(type(other)))
+            return TypeError(f"""Type error: Please make sure argument is a Vector instance.
+                                 Cannot perform dot product between a Vector and {type(other)}""")
