@@ -22,7 +22,7 @@ def main():
     v3 = Vector(10)
     print("{0: <20}".format("v3: "), v3)
     print("{0: <20}".format("v3.shape: "), v3.shape)
-    print("{0: <20}".format("v3.T(): "), v3.T()) 
+    print("{0: <20}".format("v3.T(): "), v3.T())
     print("{0: <20}".format("v3.T().shape"), v3.T().shape)
 
     # Example 4:
@@ -55,15 +55,19 @@ def main():
 
     # Error management 
     print("\n/////ERROR MANAGEMENT/////")
+
     print("\nInitializing vector with str argument")
     v5 = Vector("Hello")
     print("{0: <20}".format("v5: "), v5)
+
     print("\nInitializing vector with float argument")
     v5 = Vector(0.15)
     print("{0: <20}".format("v5: "), v5)
+
     print("\nInitializing vector with array of string")
     v5 = Vector(["hello", "how", "are", "you"])
     print("{0: <20}".format("v5: "), v5)
+
     print("\nInitializing vector with array of inconsistent types")
     v5 = Vector(["hello", 15, 0.5, None])
     print("{0: <20}".format("v5: "), v5)

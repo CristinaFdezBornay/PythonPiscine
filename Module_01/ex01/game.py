@@ -15,16 +15,16 @@ class Stark(GotCharacter):
         print(self.house_words)
 
     def die(self) -> None:
-        print("-> {self.first_name}.die()")
+        print(f"\n=> {self.first_name}.die()")
         self.is_alive = False
 
 if __name__ == "__main__":
     Arya = Stark("Arya")
-    print("-> Arya.__dict__ :")
+    print("=> Arya.__dict__ :")
     print(Arya.__dict__)
-    print("-> Arya.print_house_words()")
+    print("\n=> Arya.print_house_words()")
     Arya.print_house_words()
-    print(f"-> Arya.is_alive : {Arya.is_alive}")
+    print(f"\n=> Arya.is_alive : {Arya.is_alive}")
     Arya.die()
-    print(f"-> Arya.is_alive : {Arya.is_alive}")
-    print(f"-> Arya.__doc__  : {Arya.__doc__}")
+    print(f"\n=> Arya.is_alive : {Arya.is_alive}")
+    print(f"\n=> Arya.__doc__  : {Arya.__doc__}")

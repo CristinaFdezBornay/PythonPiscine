@@ -44,6 +44,7 @@ def generator(text: str, sep: str = " ", option: str = None) -> None:
 
 if __name__ == "__main__":
     if len(argv) < 2:
+        print("ERROR")
         exit()
-    for word in generator(argv[1], " "):
+    for word in generator(argv[1], sep=" "):
         print(word)
