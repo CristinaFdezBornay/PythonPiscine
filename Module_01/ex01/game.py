@@ -1,20 +1,22 @@
-
 class GotCharacter():
-    def __init__(self, first_name: str = None, is_alive: bool = True):
+    """A class that allows user to manage characters. Stores name and alive status"""
+    def __init__(self, first_name=None, is_alive=True):
         self.first_name = first_name
         self.is_alive = is_alive
 
 class Stark(GotCharacter):
     """A class representing the Stark family. Or when bad things happen to good people."""
-    def __init__(self, first_name: str = None, is_alive: bool = True):
+    def __init__(self, first_name=None, is_alive=True):
         super().__init__(first_name=first_name, is_alive=is_alive)
         self.family_name = "Stark"
         self.house_words = "Winter is Coming"
 
-    def print_house_words(self) -> None:
+    def print_house_words(self):
+        """Prints the house words. Attribute that is unique to each house"""
         print(self.house_words)
 
-    def die(self) -> None:
+    def die(self):
+        """Method that will set is_alive status to False and kill the GotCharacter"""
         print(f"\n=> {self.first_name}.die()")
         self.is_alive = False
 

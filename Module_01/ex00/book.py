@@ -1,8 +1,12 @@
 from datetime import datetime
 from recipe import Recipe
 
-class Book(object):
-    def __init__(self, name=None, recipes_list=None,
+class Book():
+    """
+    This class allows the user to store recipes in a Book object.
+    The book has a name, creation date, update date, recipe list
+    """
+    def __init__(self, name=None, recipes_list={'starter':[], 'lunch':[], 'dessert':[]},
                  last_update=datetime.now(), creation_date=datetime.now()):
         """
         name : Book name
@@ -18,8 +22,10 @@ class Book(object):
             self._verify_input()
         except Exception as exception:
             print(exception)
+            return None
 
     def _verify_input(self):
+        """Verifies if user input is valid with type and value"""
         if not isinstance(self.name, str):
             raise NameError("Input error: Book name must be a string.")
         if not isinstance(self.last_update, datetime):
@@ -27,26 +33,26 @@ class Book(object):
         if not isinstance(self.creation_date, datetime):
             raise NameError("Input error: Book creation date must be a datetime.")
         if not isinstance(self.recipes_list, dict):
-            raise NameError("""Input error: Recipes list must be a dictionary with
-             the following keys: 'starter', 'lunch' or 'dessert'.""")
+            raise NameError("Input error: Recipes list must be a dictionary with \
+the following keys: 'starter', 'lunch' or 'dessert'.")
         else:
             for recipe_type in list(self.recipes_list.keys()):
                 if recipe_type not in ['starter', 'lunch', 'dessert']:
-                    raise NameError(f"""Input error: Recipes list dictionary has
-                     invalid key '{recipe_type}'. It must be one of the
-                     following: 'starter', 'lunch' or 'dessert'.""")
+                    raise NameError(f"Input error: Recipes list dictionary has \
+invalid key '{recipe_type}'. It must be one of the \
+following: 'starter', 'lunch' or 'dessert'.")
             missing_keys = []
             for recipe_type in ['starter', 'lunch', 'dessert']:
                 if recipe_type not in list(self.recipes_list.keys()):
                     missing_keys.append(recipe_type)
             if len(missing_keys) > 0:
-                raise NameError(f"""Input error: Recipes list must have the
-                 following key: {missing_keys}""")
+                raise NameError(f"Input error: Recipes list must have the \
+following key: {missing_keys}")
         for recipe_array in self.recipes_list.values():
             for recipe in recipe_array:
                 if not isinstance(recipe, Recipe):
-                    raise NameError("""Input error: Recipes in recipe list
-                     dictionary must be Recipe instances.""")
+                    raise NameError("Input error: Recipes in recipe list \
+dictionary must be Recipe instances.")
 
     def __str__(self):
         """Return the string to print with the recipe info"""
@@ -75,8 +81,10 @@ class Book(object):
         for _, recipes in self.recipes_list.items():
             for recipe in recipes:
                 if recipe.name == name:
+                    print(recipe)
                     return recipe
-        return f"Couldn't find {name} recipe in the book. Are you sure you spelled it correctly?"
+        print(f"Couldn't find {name} recipe in the book. Are you sure you spelled it correctly?")
+        return None
 
     def get_recipes_by_types(self, recipe_type=None):
         """Get all recipe names for a given recipe_type"""
@@ -88,8 +96,8 @@ class Book(object):
                 for recipe in recipes:
                     ret.append(recipe.name)
                 return ret
-        return f"""Couldn't find {recipe_type} recipes in the book.
-         Are you sure you spelled it correctly?"""
+        print(f"Couldn't find {recipe_type} recipes in the book. Are you sure you spelled it correctly?")
+        return None
 
     def add_recipe(self, recipe):
         """Add a recipe to the book and update last_update"""
@@ -99,6 +107,6 @@ class Book(object):
         if recipe.recipe_type in ["starter", "lunch", "dessert"]:
             formated_last_update = self.last_update.strftime("%Y-%m-%d %H:%M:%S")
             print(f"""Adding {recipe.name} to {recipe.recipe_type} recipes.
-             Updated {self.name} book at {formated_last_update}.""")
+Updated {self.name} book at {formated_last_update}.""")
             self.recipes_list[recipe.recipe_type].append(recipe)
             self.last_update = datetime.now()

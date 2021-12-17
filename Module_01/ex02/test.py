@@ -53,8 +53,8 @@ def main():
     print("{0: <20}".format("v1 / 2: "), v1 / 2)
     print("{0: <20}".format("(v1 / 2).shape: "), (v1 / 2).shape)
 
-    # Error management 
-    print("\n/////ERROR MANAGEMENT/////")
+    # Error management
+    print("\n===========================ERROR MANAGEMENT=========================")
 
     print("\nInitializing vector with str argument")
     v5 = Vector("Hello")
@@ -86,10 +86,12 @@ def main():
 
     print("\nVector division by another vector")
     print("{0: <20}".format("v1: "), v1)
+    print("{0: <20}".format("v2: "), v2)
     print("{0: <20}".format("v1 / v2: "), v1 / v2)
 
     print("\nVector multiplication by another vector")
     print("{0: <20}".format("v1: "), v1)
+    print("{0: <20}".format("v2: "), v2)
     print("{0: <20}".format("v1 * v2: "), v1 * v2)
 
 if __name__=="__main__":

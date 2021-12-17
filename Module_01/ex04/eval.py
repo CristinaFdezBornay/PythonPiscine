@@ -1,6 +1,11 @@
-class Evaluator(object):
+class Evaluator():
+    """
+    Class containing two methods that will compute the sum of the lengths of every words of a 
+    given list weighted by a list of coefs
+    """
     @staticmethod
     def zip_evaluate(coefficients, words):
+        """Sum of lengths calculation using zip function"""
         if not isinstance(coefficients, list) \
            or not isinstance(words, list) or len(coefficients) != len(words):
             return -1
@@ -14,6 +19,7 @@ class Evaluator(object):
 
     @staticmethod
     def enumerate_evaluate(coefficients, words):
+        """Sum of lengths calculation using enumerate function"""
         if not isinstance(coefficients, list) \
            or not isinstance(words, list) or len(coefficients) != len(words):
             return -1

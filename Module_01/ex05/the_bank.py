@@ -1,6 +1,7 @@
 import re
 
-class Account(object):
+class Account():
+    """Client account"""
 
     ID_COUNT = 1
 
@@ -8,7 +9,6 @@ class Account(object):
         self.id = self.ID_COUNT
         self.name = name
         self.__dict__.update(kwargs)
-        self.value = None
         Account.ID_COUNT += 1
 
     def __getitem__(self, key):
@@ -22,27 +22,41 @@ class Account(object):
         return txt
 
     def transfer(self, amount):
+        """Method to allow bank transfer to this account"""
         self.value += amount
 
-class Bank(object):
+class Bank():
     """The bank"""
     def __init__(self):
         self.account = []
 
-    def _is_valid_account(self, account):
+    @staticmethod
+    def _is_valid_account(account):
         """Verify if account given as argument is valid"""
+        found = {
+            'name':False,
+            'id':False,
+            'value':False,
+            'zip':False,
+            'addr':False
+        }
         if isinstance(account, Account):
             if len(account.__dict__) % 2 == 0:
                 raise ValueError("Value Error: Corrupted account. Even number of attributes.")
             for attribute in account.__dict__.keys():
                 if re.search("^b", attribute):
                     raise ValueError(f"Value Error: Corrupted account. Invalid attribute '{attribute}'.")
-            for attribute in ['name', 'id', 'value', 'zip', 'addr']:
-                if attribute not in dir(account):
-                    raise ValueError(f"Value Error: Corrupted account. Missing attribute '{attribute}'.")
+                if attribute in found.keys():
+                    found[attribute] = True
+            if False in found.values():
+                missing_values = list(found.keys())[list(found.values()).index(False)]
+                if missing_values in ['zip','addr']:
+                    if (found['zip'] is False and found['addr'] is True) \
+                        or (found['zip'] is True and found['addr'] is False):
+                        return True
+                raise ValueError(f"Value Error: Corrupted account. Missing attribute '{missing_values}'.")
             return True
-        else:
-            raise TypeError("Type Error: Argument needs to be an Account object.")
+        raise TypeError("Type Error: Argument needs to be an Account object.")
 
     def add(self, account):
         """Method to add account to bank"""
@@ -51,8 +65,6 @@ class Bank(object):
                 self.account.append(account)
         except Exception as exception:
             print(TypeError(f"{exception} Please make sure you are adding a valid Account object."))
-            if isinstance(account, Account):
-                self.fix_account(account)
 
     def transfer(self, origin, dest, amount):
         """
@@ -62,50 +74,53 @@ class Bank(object):
         @return True if success, False if an error occurred
         """
         if not isinstance(origin, int) and not isinstance(origin, str):
-            print(TypeError("""Type Error: Wrong type for origin argument.
-            Please make sure it is a valid Account name or Account id."""))
+            print(TypeError("Type Error: Wrong type for origin argument. \
+Please make sure it is a valid Account name or Account id."))
             return False
-        elif not isinstance(dest, int) and not isinstance(dest, str):
-            print(TypeError("""Type Error: Wrong type for dest argument.
-            Please make sure it is a valid Account name or Account id."""))
+        if not isinstance(dest, int) and not isinstance(dest, str):
+            print(TypeError("Type Error: Wrong type for dest argument. \
+Please make sure it is a valid Account name or Account id."))
             return False
-        if isinstance(origin, int) or isinstance(origin, str):
+        if isinstance(origin, (int, str)):
             origin_account =  next((item for item in self.account if item["id"] == origin), None)\
                 if isinstance(origin, int) else next((item for item in self.account if item["name"] == origin), None)
             if origin_account is None:
-                print(ValueError("""Value Error: Origin account not found in bank accounts.
-                Are you sure you've added the account to this bank?"""))
+                print(ValueError("Value Error: Origin account not found in bank accounts. \
+Are you sure you've added the account to this bank?"))
                 return False
-        if isinstance(dest, int) or isinstance(dest, str):
+        if isinstance(dest, (int, str)):
             dest_account =  next((item for item in self.account if item["id"] == dest), None)\
                 if isinstance(dest, int) else next((item for item in self.account if item["name"] == dest), None)
             if dest_account is None:
-                print(ValueError("""Value Error: Dest account not found in bank accounts.
-                Are you sure you've added the account to this bank?"""))
+                print(ValueError("Value Error: Dest account not found in bank accounts. \
+Are you sure you've added the account to this bank?"))
                 return False
         if not isinstance(amount, int) and not isinstance(amount, float):
-            print(TypeError("""Type Error: Wrong type for amount argument.
-            Please make sure it is an int or a float."""))
+            print(TypeError("Type Error: Wrong type for amount argument. \
+Please make sure it is an int or a float."))
+            return False
+        origin_index = self.account.index(origin_account)
+        dest_index = self.account.index(dest_account)
+        if float(self.account[origin_index].value) < float(amount):
+            print(ValueError(f"Value Error: You are trying to transfer {float(amount)} \
+from {origin_account['name']} account but funds are insufficient."))
+            return False
+        elif float(amount) < 0:
+            print(ValueError("Value Error: You are trying to transfer a negative amount."))
             return False
         else:
-            origin_index = self.account.index(origin_account)
-            dest_index = self.account.index(dest_account)
-            if float(self.account[origin_index].value) < float(amount):
-                print(ValueError(f"""Value Error: You are trying to transfer {float(amount)}
-                 from {origin_account['name']} account but funds are insufficient."""))
-            elif float(amount) < 0:
-                print(ValueError("Value Error: You are trying to transfer a negative amount."))
-            else:
-                self.account[origin_index].transfer(float(-amount))
-                self.account[dest_index].transfer(float(amount))
+            self.account[origin_index].transfer(float(-amount))
+            self.account[dest_index].transfer(float(amount))
+            return True
 
-    def fix_account(self, account):
+    @staticmethod
+    def fix_account(account):
         """
         fix the corrupted account
         @account: int(id) or str(name) of the account
         @return True if success, False if an error occurred
         """
-        print(f"Fixing account \n{account}")
+        print(f"Fixing account {account}")
         keys_to_change = {}
         for attribute in account.__dict__.keys():
             if re.search("^b", attribute):
@@ -127,5 +142,5 @@ class Bank(object):
                     setattr(account, attribute, 'No address')
         if len(account.__dict__) % 2 == 0:
             setattr(account, 'placeholder', 0)
-        print(f"Attempting to add fixed account to the bank \n{str(account)}")
-        self.add(account)
+        print("Fixed account.")
+        return True
