@@ -3,7 +3,7 @@ from book import Book
 
 def main():
     print("Creating valid recipes quiche, salad, cake, tartines, stir fry.")
-    quiche = Recipe("quiche", 2, 35,['puff pastry', 'eggs', 'leeks', 'cheese'],
+    quiche = Recipe("quiche", 2, 35, ['puff pastry', 'eggs', 'leeks', 'cheese'],
                     'lunch', 'Delicious leeks quiche')
     salad = Recipe("salad", 1, 15, ['romaine', 'tomatoes', 'avocado', 'egg'],
                    'lunch', 'Quick and easy')
@@ -16,20 +16,25 @@ def main():
 
     print("\n================================================")
     input("\n=> Press ENTER to continue with the testing.\n")
-
     print("\nTESTING ERROR MANAGEMENT FOR RECIPE CLASS\n")
-    print("\nCreating Recipe object with string instead of int as difficulty level")
+
+    print("\n1. Creating Recipe object with string instead of int as difficulty level")
     Recipe("hello", "this is should be an int", 10, [], 'lunch')
-    print("\nCreating Recipe object with string instead of int as cooking time")
+
+    print("\n2. Creating Recipe object with string instead of int as cooking time")
     Recipe("hello", 1, "this should be an int", [], 'lunch')
-    print("\nCreating Recipe object with string instead of list as ingredients list")
+
+    print("\n3. Creating Recipe object with string instead of list as ingredients list")
     Recipe("hello", 1, 10, "this should be an array", 'lunch')
-    print("\nCreating Recipe object with non existing meal type")
-    Recipe("hello", 1, 10, [], 'this should be starter, lunch or dessert')
-    print("\nCreating Recipe object with array instead of str as recipe description")
-    Recipe("hello", 1, 10, [], 'lunch', ['description must be a str'])
-    print("\nCreating Recipe object with int instead of str as recipe name")
-    Recipe(12, 1, 10, [], 'lunch')
+
+    print("\n4. Creating Recipe object with non existing meal type")
+    Recipe("hello", 1, 10, ["salad"], 'this should be starter, lunch or dessert')
+
+    print("\n5. Creating Recipe object with array instead of str as recipe description")
+    Recipe("hello", 1, 10, ["salad"], 'lunch', ['description must be a str'])
+
+    print("\n6. Creating Recipe object with int instead of str as recipe name")
+    Recipe(12, 1, 10, ["salad"], 'lunch')
 
     print("\n================================================")
     input("\n=> Press ENTER to continue with the testing.\n")
@@ -40,17 +45,21 @@ def main():
 
     print("\n================================================")
     input("\n=> Press ENTER to continue with the testing.\n")
-
     print("\nTESTING ERROR MANAGEMENT FOR BOOK CLASS.\n")
-    print("\nCreating Book object with array as book name instead of str")
+
+    print("\n1. Creating Book object with array as book name instead of str")
     Book(["Book name should be a string"], {"starter":[], "lunch":[], "dessert":[]})
-    print("\nCreating Book object with array as recipe list instead of dict")
+
+    print("\n2. Creating Book object with array as recipe list instead of dict")
     Book("Wrong book", ['recipe list should be a dictionary'])
-    print("\nCreating Book object with non existing meal type as recipe list dict key")
+
+    print("\n3. Creating Book object with non existing meal type as recipe list dict key")
     Book("Wrong book", {'wrong key': 'this should be a recipe list'})
-    print("\nCreating Book object with string type instead of array for recipe list dict values")
+    
+    print("\n4. Creating Book object with string type instead of array for recipe list dict values")
     Book("Wrong book", {'starter': 'this should be a recipe list'})
-    print("\nCreating Book object with string type instead of array for recipe list dict values")
+
+    print("\n5. Creating Book object with string type instead of array for recipe list dict values")
     Book("Wrong book", {'starter': 'this should be a recipe list', 'lunch':[],'dessert':[]})
 
     print("\n================================================")

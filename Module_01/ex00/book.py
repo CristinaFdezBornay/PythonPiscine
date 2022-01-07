@@ -33,26 +33,20 @@ class Book():
         if not isinstance(self.creation_date, datetime):
             raise NameError("Input error: Book creation date must be a datetime.")
         if not isinstance(self.recipes_list, dict):
-            raise NameError("Input error: Recipes list must be a dictionary with \
-the following keys: 'starter', 'lunch' or 'dessert'.")
-        else:
-            for recipe_type in list(self.recipes_list.keys()):
-                if recipe_type not in ['starter', 'lunch', 'dessert']:
-                    raise NameError(f"Input error: Recipes list dictionary has \
-invalid key '{recipe_type}'. It must be one of the \
-following: 'starter', 'lunch' or 'dessert'.")
-            missing_keys = []
-            for recipe_type in ['starter', 'lunch', 'dessert']:
-                if recipe_type not in list(self.recipes_list.keys()):
-                    missing_keys.append(recipe_type)
-            if len(missing_keys) > 0:
-                raise NameError(f"Input error: Recipes list must have the \
-following key: {missing_keys}")
+            raise NameError("Input error: Recipes list must be a dictionary with the following keys: 'starter', 'lunch' or 'dessert'.")
+        for recipe_type in list(self.recipes_list.keys()):
+            if recipe_type not in ['starter', 'lunch', 'dessert']:
+                raise NameError(f"Input error: Recipes list dictionary has invalid key '{recipe_type}'. It must be one of the following: 'starter', 'lunch' or 'dessert'.")
+        missing_keys = []
+        for recipe_type in ['starter', 'lunch', 'dessert']:
+            if recipe_type not in list(self.recipes_list.keys()):
+                missing_keys.append(recipe_type)
+        if len(missing_keys) > 0:
+            raise NameError(f"Input error: Recipes list must have the following key: {missing_keys}")
         for recipe_array in self.recipes_list.values():
             for recipe in recipe_array:
                 if not isinstance(recipe, Recipe):
-                    raise NameError("Input error: Recipes in recipe list \
-dictionary must be Recipe instances.")
+                    raise NameError("Input error: Recipes in recipe list dictionary must be Recipe instances.")
 
     def __str__(self):
         """Return the string to print with the recipe info"""
@@ -81,7 +75,6 @@ dictionary must be Recipe instances.")
         for _, recipes in self.recipes_list.items():
             for recipe in recipes:
                 if recipe.name == name:
-                    print(recipe)
                     return recipe
         print(f"Couldn't find {name} recipe in the book. Are you sure you spelled it correctly?")
         return None
@@ -106,7 +99,6 @@ dictionary must be Recipe instances.")
             return
         if recipe.recipe_type in ["starter", "lunch", "dessert"]:
             formated_last_update = self.last_update.strftime("%Y-%m-%d %H:%M:%S")
-            print(f"""Adding {recipe.name} to {recipe.recipe_type} recipes.
-Updated {self.name} book at {formated_last_update}.""")
+            print(f"Adding {recipe.name} to {recipe.recipe_type} recipes. Updated {self.name} book at {formated_last_update}.")
             self.recipes_list[recipe.recipe_type].append(recipe)
             self.last_update = datetime.now()
