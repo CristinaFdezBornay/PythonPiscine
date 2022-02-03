@@ -1,7 +1,5 @@
 from generator import *
 
-
-
 def main():
     text = "Le Lorem Ipsum est simplement du faux texte."
 
