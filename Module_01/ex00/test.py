@@ -70,6 +70,10 @@ def main():
     print()
     print(recipes)
 
+    print("\nPrinting book creation date vs last update")
+    print(recipes.creation_date)
+    print(recipes.last_update)
+
     print("\n================================================")
     input("\n=> Press ENTER to continue with the testing.\n")
 
@@ -105,7 +109,7 @@ def main():
     print("\n================================================")
     input("\n=> Press ENTER to continue with the testing.\n")
 
-    print("Printing book creation date vs last update")
+    print("\nPrinting book creation date vs last update")
     print(recipes.creation_date)
     print(recipes.last_update)
 
@@ -120,6 +124,10 @@ def main():
 
     print("\nBOOK GET_RECIPE METHOD BY MEAL TYPE: looking for lunch recipes.\n")
     print(recipes.get_recipes_by_types("lunch"))
+
+    print("\nPrinting book creation date vs last update")
+    print(recipes.creation_date)
+    print(recipes.last_update)
 
     print("\n================================================")
     input("\n=> Press ENTER to continue with the testing.\n")
