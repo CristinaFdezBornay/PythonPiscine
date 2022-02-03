@@ -21,12 +21,23 @@ class Stark(GotCharacter):
         self.is_alive = False
 
 if __name__ == "__main__":
-    Arya = Stark("Arya")
-    print("=> Arya.__dict__ :")
-    print(Arya.__dict__)
+    empty_GC = GotCharacter()
+    print("=> Empty GotCharacter")
+    print(empty_GC.__dict__)
+
+    random_GC = GotCharacter("Random", True)
+    print("\n=> Random GotCharacter")
+    print(random_GC.__dict__)
+    print(random_GC.__doc__)
+
+    arya = Stark("Arya")
+    print("\n=> Arya.__dict__ :")
+    print(arya.__dict__)
     print("\n=> Arya.print_house_words()")
-    Arya.print_house_words()
-    print(f"\n=> Arya.is_alive : {Arya.is_alive}")
-    Arya.die()
-    print(f"\n=> Arya.is_alive : {Arya.is_alive}")
-    print(f"\n=> Arya.__doc__  : {Arya.__doc__}")
+
+    arya.print_house_words()
+    print(f"\n=> Arya.is_alive : {arya.is_alive}")
+
+    arya.die()
+    print(f"\n=> Arya.is_alive : {arya.is_alive}")
+    print(f"\n=> Arya.__doc__  : {arya.__doc__}")
