@@ -33,11 +33,16 @@ if __name__ == "__main__":
     arya = Stark("Arya")
     print("\n=> Arya.__dict__ :")
     print(arya.__dict__)
+
     print("\n=> Arya.print_house_words()")
-
     arya.print_house_words()
-    print(f"\n=> Arya.is_alive : {arya.is_alive}")
 
+    print(f"\n=> Arya.is_alive : {arya.is_alive}")
     arya.die()
     print(f"\n=> Arya.is_alive : {arya.is_alive}")
+
     print(f"\n=> Arya.__doc__  : {arya.__doc__}")
+
+    lol = Stark("LOL")
+    print("\n=> LOL.__dict__ :")
+    print(lol.__dict__)
