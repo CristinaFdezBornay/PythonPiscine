@@ -41,7 +41,7 @@ class Bank():
             'addr':False
         }
         if isinstance(account, Account):
-            if len(account.__dict__) % 2 == 0:
+            if len(account.__dict__) % 2 == 1:
                 raise ValueError("Value Error: Corrupted account. Even number of attributes.")
             for attribute in account.__dict__.keys():
                 if re.search("^b", attribute):
@@ -58,9 +58,21 @@ class Bank():
             return True
         raise TypeError("Type Error: Argument needs to be an Account object.")
 
+    def find_account(self, account_to_find):
+        if not isinstance(account_to_find, int) and not isinstance(account_to_find, str):
+            return None
+        account_found =  next((item for item in self.account if item["id"] == account_to_find), None)\
+                if isinstance(account_to_find, int) else next((item for item in self.account if item["name"] == account_to_find), None)
+        if account_found is None:
+            return None
+        return account_found
+
     def add(self, account):
         """Method to add account to bank"""
         try:
+            if self.find_account(account['name']) != None:
+                print(ValueError("Value Error: Account name is already in the bank accounts."))
+                return
             if self._is_valid_account(account):
                 self.account.append(account)
         except Exception as exception:
@@ -73,28 +85,14 @@ class Bank():
         @amount: float(amount) amount to transfer
         @return True if success, False if an error occurred
         """
-        if not isinstance(origin, int) and not isinstance(origin, str):
-            print(TypeError("Type Error: Wrong type for origin argument. \
-Please make sure it is a valid Account name or Account id."))
+        origin_account = self.find_account(origin)
+        if origin_account == None:
+            print(ValueError("Value Error: Account not found in bank accounts. Are you sure you've added the account to this bank?"))
             return False
-        if not isinstance(dest, int) and not isinstance(dest, str):
-            print(TypeError("Type Error: Wrong type for dest argument. \
-Please make sure it is a valid Account name or Account id."))
+        dest_account = self.find_account(dest)
+        if dest_account == None:
+            print(ValueError("Value Error: Account not found in bank accounts. Are you sure you've added the account to this bank?"))
             return False
-        if isinstance(origin, (int, str)):
-            origin_account =  next((item for item in self.account if item["id"] == origin), None)\
-                if isinstance(origin, int) else next((item for item in self.account if item["name"] == origin), None)
-            if origin_account is None:
-                print(ValueError("Value Error: Origin account not found in bank accounts. \
-Are you sure you've added the account to this bank?"))
-                return False
-        if isinstance(dest, (int, str)):
-            dest_account =  next((item for item in self.account if item["id"] == dest), None)\
-                if isinstance(dest, int) else next((item for item in self.account if item["name"] == dest), None)
-            if dest_account is None:
-                print(ValueError("Value Error: Dest account not found in bank accounts. \
-Are you sure you've added the account to this bank?"))
-                return False
         if not isinstance(amount, int) and not isinstance(amount, float):
             print(TypeError("Type Error: Wrong type for amount argument. \
 Please make sure it is an int or a float."))
@@ -120,7 +118,7 @@ from {origin_account['name']} account but funds are insufficient."))
         @account: int(id) or str(name) of the account
         @return True if success, False if an error occurred
         """
-        print(f"Fixing account {account}")
+        print(f"Fixing account {account['name']}")
         keys_to_change = {}
         for attribute in account.__dict__.keys():
             if re.search("^b", attribute):
@@ -140,7 +138,7 @@ from {origin_account['name']} account but funds are insufficient."))
                     setattr(account, attribute, 00000)
                 if attribute == 'addr':
                     setattr(account, attribute, 'No address')
-        if len(account.__dict__) % 2 == 0:
+        if len(account.__dict__) % 2 == 1:
             setattr(account, 'placeholder', 0)
         print("Fixed account.")
         return True
