@@ -1,8 +1,7 @@
 def function_filter(function_to_apply, iterable):
     """Filter result of function and apply it to all elements of the iterable"""
     for i in iterable:
-        print(i)
-        if function_to_apply(i) != True:
+        if function_to_apply(i) == True:
             yield i
 
 def ft_filter(function_to_apply, iterable):

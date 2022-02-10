@@ -2,8 +2,15 @@ def function_reduce(function_to_apply, iterable):
     """Apply function of two arguments cumulatively"""
     if function_to_apply.__code__.co_argcount != 2:
         raise TypeError("<lambda>() takes 2 arguments")
+    if not hasattr(iterable, '__iter__'):
+        return iterable
     ret = None
-    for i in range(len(iterable) - 1):
+    lenn = len(iterable) - 2
+    print("lenn: ", lenn)
+    for i in range(lenn):
+        print("i: ", i)
+        print("ret: ", ret)
+        print("iterable[i+1]: ", iterable[i+1])
         if ret is None:
             ret = iterable[i]
         ret = function_to_apply(ret, iterable[i+1])

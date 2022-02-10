@@ -20,4 +20,3 @@ def ft_map(function_to_apply, iterable):
         raise TypeError("'{}' object is not iterable".format(type(iterable).__name__))
     else:
         return function_map(function_to_apply, iterable)
-
