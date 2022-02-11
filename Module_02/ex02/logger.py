@@ -3,20 +3,20 @@ import logging
 import threading, time
 from random import randint
 from functools import wraps
-import getpass
+import os
 
 FORMAT = '(%(user)s)Running: %(message)s'
 logging.basicConfig(filename='machine.log',
-                            filemode='a',
-                            format=FORMAT,
-                            datefmt='%H:%M:%S',
-                            level=logging.INFO)
+                    filemode='a',
+                    format=FORMAT,
+                    datefmt='%H:%M:%S',
+                    level=logging.INFO)
 logger = logging.getLogger('machine')
 
 def log(fn):
     @wraps(fn)
     def time_func(*args, **kwargs):
-        d = {'user': getpass.getuser()}
+        d = {'user': os.environ["USER"]}
 
         t = threading.Thread(target=fn, args=args, kwargs=kwargs)
         start_time = time.time()
@@ -39,7 +39,7 @@ def log(fn):
         fn_name = ' '.join(fn_name)
         msg = f'{fn_name:<19}'
         msg += '[ exec-time = {runtime} ]'.format(runtime=runtime)
-        logger.info(msg,extra=d)
+        logger.info(msg, extra=d)
         return fn(*args, **kwargs)
     return time_func
 
