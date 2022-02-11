@@ -32,6 +32,7 @@ class CsvReader():
 
     def __exit__(self, type:str=None, value:Exception=None, traceback=None) -> None:
         if self.exception == True:
+            print("\n/!\ This is a properly managed error.\n")
             if traceback:
                 self.__print_traceback__(traceback)
             print("[{}] {}".format(type if type else "ERROR", value if value else ""))
