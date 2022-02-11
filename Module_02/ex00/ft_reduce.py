@@ -1,19 +1,11 @@
 def function_reduce(function_to_apply, iterable):
     """Apply function of two arguments cumulatively"""
-    if function_to_apply.__code__.co_argcount != 2:
-        raise TypeError("<lambda>() takes 2 arguments")
-    if not hasattr(iterable, '__iter__'):
-        return iterable
     ret = None
-    lenn = len(iterable) - 2
-    print("lenn: ", lenn)
-    for i in range(lenn):
-        print("i: ", i)
-        print("ret: ", ret)
-        print("iterable[i+1]: ", iterable[i+1])
-        if ret is None:
-            ret = iterable[i]
-        ret = function_to_apply(ret, iterable[i+1])
+    for i, it in enumerate(iterable):
+        if i == 0:
+            ret = it
+            continue
+        ret = function_to_apply(ret, it)
     return ret
 
 def ft_reduce(function_to_apply, iterable):
@@ -29,5 +21,7 @@ def ft_reduce(function_to_apply, iterable):
         raise TypeError("'{}' object is not callable".format(type(function_to_apply).__name__))
     elif not hasattr(iterable, '__iter__'):
         raise TypeError("'{}' object is not iterable".format(type(iterable).__name__))
-    else:
-        return function_reduce(function_to_apply, iterable)
+    elif function_to_apply.__code__.co_argcount != 2:
+        raise TypeError("<lambda>() takes 2 arguments")
+    return function_reduce(function_to_apply, iterable)
+    

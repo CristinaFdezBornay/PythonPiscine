@@ -12,7 +12,11 @@ functions = {
 def unit_test(message, function_to_test, function_to_apply, iterable):
     try:
         print("\n=> ", message)
-        print(list(functions[function_to_test](function_to_apply, iterable)))
+        out = functions[function_to_test](function_to_apply, iterable)
+        if hasattr(out, '__iter__') and not isinstance(out, str):
+            print(list(functions[function_to_test](function_to_apply, iterable)))
+        else:
+            print(functions[function_to_test](function_to_apply, iterable))
     except TypeError as e:
         print(e)
 
@@ -43,7 +47,7 @@ if __name__=="__main__":
 
     unit_test("Valid test reduce 1", "reduce", lambda x, y: x + y, [])
     unit_test("Valid test reduce 2", "reduce", lambda x, y: x + y, [1])
-    unit_test("Valid test reduce 3", "reduce", lambda x, y: x + y, ['H', 'o', 'l', 'a', ' ', 'l', 'o', 'k', 'i'])
+    unit_test("Valid test reduce 4", "reduce", lambda x, y: x + y, iterable)
     unit_test("Valid test reduce 4", "reduce", lambda x, y: x * y, iterable)
+    unit_test("Valid test reduce 3", "reduce", lambda x, y: x + y, ['H', 'o', 'l', 'a', ' ', 'l', 'o', 'k', 'i'])
     input("\n============= Press ENTER to continue ==>\n")
-
