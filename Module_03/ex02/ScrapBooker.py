@@ -1,3 +1,4 @@
+import numpy as np
 
 class ScrapBooker():
     def crop(self, array, dim, position=(0,0)):
@@ -14,7 +15,12 @@ class ScrapBooker():
         Raises:
           This function should not raise any Exception.
         """
-        return None
+        try:
+            x_dim, y_dim = dim
+            x_pos, y_pos = position
+            return array[x_pos:(x_pos+x_dim), y_pos:(y_pos+y_dim)]
+        except:
+            return None
 
     def thin(self, array, n, axis):
         """
@@ -30,7 +36,12 @@ class ScrapBooker():
         Raises:
           This function should not raise any Exception.
         """
-        return None
+        try:
+            x_shape, y_shape = array.shape
+            indices = list(range(n - 1, x_shape if axis is 0 else y_shape, n))
+            return np.delete(array, indices, axis)
+        except:
+            return None
 
     def juxtapose(self, array, n, axis):
         """
