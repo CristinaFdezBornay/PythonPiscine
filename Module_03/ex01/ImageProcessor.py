@@ -1,15 +1,20 @@
-# import matplotlib
+from PIL import Image
+from numpy import asarray
 
 class ImageProcessor():
     def load(path):
         try:
-            file = open(path, 'r')
-            print(file)
+            img = Image.open(path)
+            numpydata = asarray(img)
+            x, y, c = numpydata.shape
+            print(f"Image from path '{path}' has been successfully loaded => SHAPE ({x}x{y})")
+            return numpydata
         except Exception as e:
-            print("Exception: {} -- strerror: {}".format(e.__class__.__name__, e))
+            print(e)
     
     def display(array):
         try:
-            print(array)
+            img = Image.fromarray(array, 'RGB')
+            img.show()
         except Exception as e:
-            print("Exception: {} -- strerror: {}".format(e.__class__.__name__, e))
+            print(e)
