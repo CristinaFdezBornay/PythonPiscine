@@ -14,7 +14,7 @@ class ImageProcessor():
     
     def display(array):
         try:
-            img = Image.fromarray(array, 'RGB')
+            img = Image.fromarray(array)
             img.show()
         except Exception as e:
             print(e)
