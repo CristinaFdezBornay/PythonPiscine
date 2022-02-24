@@ -19,7 +19,8 @@ class ScrapBooker():
             x_dim, y_dim = dim
             x_pos, y_pos = position
             return array[x_pos:(x_pos+x_dim), y_pos:(y_pos+y_dim)]
-        except:
+        except Exception as e:
+            print("[ERROR] ", e)
             return None
 
     def thin(self, array, n, axis):
@@ -38,9 +39,10 @@ class ScrapBooker():
         """
         try:
             x_shape, y_shape = array.shape
-            indices = list(range(n - 1, x_shape if axis is 0 else y_shape, n))
+            indices = list(range(n - 1, x_shape if axis == 0 else y_shape, n))
             return np.delete(array, indices, axis)
-        except:
+        except Exception as e:
+            print("[ERROR] ", e)
             return None
 
     def juxtapose(self, array, n, axis):
@@ -56,7 +58,16 @@ class ScrapBooker():
         Raises:
           This function should not raise any Exception.
         """
-        return None
+        try:
+          if n < 1:
+              raise(ValueError)
+          out = array
+          for i in range(1, n):
+            out = np.append(out, array, axis)
+          return out
+        except Exception as e:
+            print("[ERROR] ", e)
+            return None
 
     def mosaic(self, array, dim):
         """
@@ -71,4 +82,11 @@ class ScrapBooker():
         Raises:
           This function should not raise any Exception.
         """
-        return None
+        try:
+          if dim[0] < 1 or dim[1] < 1:
+              raise(ValueError)
+          out = self.juxtapose(array, dim[0], 0)
+          return self.juxtapose(out, dim[1], 1)
+        except Exception as e:
+            print("[ERROR] ", e)
+            return None
