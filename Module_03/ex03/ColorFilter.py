@@ -63,9 +63,13 @@ class ColorFilter():
     def to_celluloid(array):
         """
         Applies a celluloid filter to the image received as a numpy array.
-        Celluloid filter must display at least four thresholds of shades.
-        Be careful! You are not asked to apply black contour on the object,
-        you only have to work on the shades of your images.
+        Le filtre celluloid est prévu pour round toutes les valeurs dans des intervales.
+        par exemple:
+        Toutes les valeurs entre 0 et 0.2 sont round a 0
+        Toutes les valeurs entre 0.2 et 0.4 sont round a 0.2
+        Toutes les valeurs entre 0.4 et 0.6 sont round a 0.4
+        Toutes les valeurs entre 0.6 et 0.8 sont round a 0.6
+        Toutes les valeurs entre 0.8 et 1 sont round a 0.8
         Remarks:
         celluloid filter is also known as cel-shading or toon-shading.
         Args:
@@ -78,7 +82,17 @@ class ColorFilter():
         """
         # threshold = 4
         # array_C = (((array  * threshold).astype(np.int32)).astype(np.float) / threshold)
-        array_C = array
+        array_C = np.zeros(array.shape)
+        print(array.shape)
+        for i in range(0, array.shape[0]):
+            for j in range(0, array.shape[1]):
+                for k in range(0, array.shape[2]):
+                    pxl = array[i,j,k] / 255
+                    pxl_threshold = 0 if pxl >= 0   and pxl < 0.2 else \
+                                  0.2 if pxl >= 0.2 and pxl < 0.4 else \
+                                  0.4 if pxl >= 0.4 and pxl < 0.6 else \
+                                  0.6 if pxl >= 0.6 and pxl < 0.8 else 0.8
+                    array_C[i,j,k] = np.round(pxl_threshold * 256)
         return array_C
 
     def to_grayscale(array, filter, weights=None):
