@@ -23,3 +23,9 @@ if __name__ == '__main__':
     header, data = get_header_and_data(filepath)
     kmc = KmeansClustering(ncentroid, max_iter)
     kmc.fit(data)
+
+    input("\n\n=> Press Enter to test the prediction")
+    data_to_test = [[174.62647624,  78.54049084,   0.93052647], [193.78446742,  87.06534183,   0.79283106]]
+    print(f"Data to test : {data_to_test}")
+    prediction = kmc.predict(data_to_test)
+    print(f"Prediction   : {prediction}")
