@@ -1,11 +1,11 @@
 from PIL import Image
-from numpy import asarray
+import numpy as np
 
 class ImageProcessor():
     def load(path):
         try:
             img = Image.open(path)
-            numpydata = asarray(img)
+            numpydata = np.asarray(img)
             x, y, c = numpydata.shape
             print(f"Image from path '{path}' has been successfully loaded => SHAPE ({x}x{y})")
             return numpydata
@@ -14,7 +14,7 @@ class ImageProcessor():
     
     def display(array):
         try:
-            img = Image.fromarray(array)
+            img = Image.fromarray((array).astype(np.uint8))
             img.show()
         except Exception as e:
             print(e)
