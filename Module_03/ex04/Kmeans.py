@@ -54,12 +54,12 @@ class KmeansClustering:
         with open(PICKLE_FILENAME, 'wb') as save_model_file:
             pickle.dump(model, save_model_file)
 
-    def _print_model(self, data_per_cluster, centroids, ramdom_centroids, dispersion):
+    def _print_model(self, data_per_cluster, centroids, random_centroids, dispersion):
         print(f"Number of clusters       : {self.ncentroid}")
         print(f"Max number of iterations : {self.max_iter}")
         print("Random initialization")
         for i in range(self.ncentroid):
-            print(f"Centroid [{i}] => {ramdom_centroids[i]}")
+            print(f"Centroid [{i}] => {random_centroids[i]}")
         print("\nFinal Model Centroids")
         for i in range(self.ncentroid):
             print(f"Centroid [{i}] => {centroids[i]} || Number of datapoints : {len(data_per_cluster[i])} || Dispersion : {dispersion[i][0]}")
@@ -75,8 +75,8 @@ class KmeansClustering:
         Raises:
             This function should not raise any Exception.
         """
-        ramdom_centroids = random.choices(data, k=self.ncentroid)
-        centroids = ramdom_centroids
+        random_centroids = random.choices(data, k=self.ncentroid)
+        centroids = random_centroids
         for _ in range(self.max_iter):
             data_per_cluster = dict()
             for x in data:
@@ -85,7 +85,7 @@ class KmeansClustering:
             centroids = self._recalculate_centroids(data_per_cluster, centroids)
         dispersion = self._get_cluster_dispersion(data_per_cluster, centroids)
         self._save_model(data_per_cluster, centroids, dispersion)
-        self._print_model(data_per_cluster, centroids, ramdom_centroids, dispersion)
+        self._print_model(data_per_cluster, centroids, random_centroids, dispersion)
 
     def predict(self, data):
         """
