@@ -1,38 +1,68 @@
 import pickle
 import random
 import numpy as np
+import matplotlib.pyplot as plt
 
-MIN_CENTROID_ITER_DIFF = 0.005
+PICKLE_FILENAME = 'model.pickle'
 
 class KmeansClustering:
     def __init__(self, ncentroid=4, max_iter=20):
         self.ncentroid = ncentroid
         self.max_iter = max_iter
-        self.centroids = []
-        self.centroids_iter_diff = MIN_CENTROID_ITER_DIFF
-        self.distances = np.zeros(ncentroid)
 
     def _distanceL1(self, x1, x2):
         return sum(abs(x1-x2))
 
-    def _append_x_to_data_per_centroid(self, centroid_index, x):
-        if centroid_index in self.data_per_centroid.keys():
-            self.data_per_centroid[centroid_index].append(x)
-        else:
-            self.data_per_centroid[centroid_index] = [x]
+    def _get_cluster_for_x(self, centroids, x):
+        distances = np.zeros(self.ncentroid)
+        for i, centroid in enumerate(centroids):
+            distances[i] = self._distanceL1(centroid, x)
+        cluster_for_x = np.where(distances == min(distances))[0][0]
+        return cluster_for_x
 
-    def _recalculate_centroid_position(self):
-        print(len(self.centroids))
-        print(len(self.data_per_centroid))
-        new_centroids = np.zeros((self.ncentroid, len(self.centroids)))
-        for i, centroid in enumerate(self.centroids):
-            features_per_centroid = np.array(self.data_per_centroid[i])
-            print(sum(features_per_centroid))
-            print(len(features_per_centroid))
-            print(sum(features_per_centroid) / len(features_per_centroid))
-            new_centroids[i] = sum(features_per_centroid) / len(features_per_centroid)
-        self.centroids_iter_diff = self._distanceL1(self.centroids, new_centroids)
-        self.centroids = new_centroids
+    def _append_x_to_dictionary(self, dictionary, i, x):
+        if i in dictionary.keys():
+            dictionary[i].append(x)
+        else:
+            dictionary[i] = [x]
+        return dictionary
+
+    def _recalculate_centroids(self, data_per_cluster, centroids):
+        for i in data_per_cluster.keys():
+            features_per_centroid = np.array(data_per_cluster[i])
+            centroids[i] = sum(features_per_centroid) / len(features_per_centroid)
+        return centroids
+
+    def _get_cluster_dispersion(self, data_per_cluster, centroids):
+        dispersion = dict()
+        for i in data_per_cluster.keys():
+            distances = []
+            for x in data_per_cluster[i]:
+                distances.append(self._distanceL1(x, centroids[i]))
+            avg_distance = round(sum(distances) / len(distances), 2)
+            dispersion = self._append_x_to_dictionary(dispersion, i, avg_distance)
+        return dispersion
+
+    def _save_model(self, data_per_cluster, centroids, dispersion):
+        model = {
+            "ncentroid": self.ncentroid,
+            "max_iter": self.max_iter,
+            "centroids": centroids,
+            "dispersion": dispersion,
+            "data_per_cluster": data_per_cluster,
+        }
+        with open(PICKLE_FILENAME, 'wb') as save_model_file:
+            pickle.dump(model, save_model_file)
+
+    def _print_model(self, data_per_cluster, centroids, ramdom_centroids, dispersion):
+        print(f"Number of clusters       : {self.ncentroid}")
+        print(f"Max number of iterations : {self.max_iter}")
+        print("Random initialization")
+        for i in range(self.ncentroid):
+            print(f"Centroid [{i}] => {ramdom_centroids[i]}")
+        print("\nFinal Model Centroids")
+        for i in range(self.ncentroid):
+            print(f"Centroid [{i}] => {centroids[i]} || Number of datapoints : {len(data_per_cluster[i])} || Dispersion : {dispersion[i][0]}")
 
     def fit(self, data):
         """
@@ -45,32 +75,21 @@ class KmeansClustering:
         Raises:
             This function should not raise any Exception.
         """
-        self.centroids = random.choices(data, k=self.ncentroid)
+        ramdom_centroids = random.choices(data, k=self.ncentroid)
+        centroids = ramdom_centroids
         for _ in range(self.max_iter):
-            if self.centroids_iter_diff < MIN_CENTROID_ITER_DIFF:
-                return
-            self.data_per_centroid = dict()
+            data_per_cluster = dict()
             for x in data:
-                for i, centroid in enumerate(self.centroids):
-                    self.distances[i] = self._distanceL1(centroid, x)
-                centroid_index = np.where(self.distances == min(self.distances))[0][0]
-                self._append_x_to_data_per_centroid(centroid_index, x)
-            self._recalculate_centroid_position()
-            input("=>")
-        return
+                cluster_for_x = self._get_cluster_for_x(centroids, x)
+                data_per_cluster = self._append_x_to_dictionary(data_per_cluster, cluster_for_x, x)
+            centroids = self._recalculate_centroids(data_per_cluster, centroids)
+        dispersion = self._get_cluster_dispersion(data_per_cluster, centroids)
+        self._save_model(data_per_cluster, centroids, dispersion)
+        self._print_model(data_per_cluster, centroids, ramdom_centroids, dispersion)
 
-    def save_model(self):
-        model = {
-            "ncentroid": self.ncentroid,
-            "max_iter": self.max_iter,
-            "centroids": self.centroids,
-        }
-        with open('model.pickle', 'wb') as save_model_file:
-            pickle.dump(model, save_model_file)
-
-    def predict(self, X):
+    def predict(self, data):
         """
-        Predict from wich cluster each datapoint belongs to.
+        Predict from which cluster each datapoint belongs to.
         Args:
             data: has to be an numpy.ndarray, a matrice of dimension m * n.
         Returns:
@@ -78,4 +97,10 @@ class KmeansClustering:
         Raises:
             This function should not raise any Exception.
         """
-        return X
+        prediction = []
+        with open(PICKLE_FILENAME, 'rb') as read_model_file:
+            model = pickle.load(read_model_file)
+        for x in data:
+            cluster_for_x = self._get_cluster_for_x(model['centroids'], x)
+            prediction.append(cluster_for_x)
+        return np.array(prediction)
