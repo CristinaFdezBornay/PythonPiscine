@@ -1,5 +1,8 @@
 from ColorFilter import ColorFilter
-from ImageProcessor import ImageProcessor
+try:
+    from ImageProcessor import ImageProcessor
+except:
+    print("Please import ImageProcessor from ex01")
 
 functions_to_test = [
     ColorFilter.invert,
