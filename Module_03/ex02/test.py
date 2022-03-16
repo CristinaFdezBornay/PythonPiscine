@@ -21,7 +21,9 @@ def unit_test(ft, array, **kwargs):
 
 if __name__ == '__main__':
     array_ints = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+    print(array_ints)
     array_chars =  np.array("A B C D E F G H I J K".split() * 8).reshape(-1, 11)
+    print(array_chars)
 
     print("==== TESTING FUNCTION CROP ===")
     unit_test("crop", array=array_ints, dim=(0,0), position=(0,0))
@@ -53,7 +55,7 @@ if __name__ == '__main__':
     unit_test("juxtapose", array=array_ints, n=1, axis=0)
     unit_test("juxtapose", array=array_ints, n=3, axis=0)
 
-    print("=== TESTING FUNCTION JUXTAPOSE ===")
+    print("=== TESTING FUNCTION MOSAIC ===")
     unit_test("mosaic", array=array_ints, dim=(0,0))
     unit_test("mosaic", array=array_ints, dim=(1,1))
     unit_test("mosaic", array=array_ints, dim=(2,2))
