@@ -1,4 +1,5 @@
 import numpy as np
+from PIL import Image
 
 class ColorFilter():
     def invert(array):
@@ -80,19 +81,16 @@ class ColorFilter():
         Raises:
         This function should not raise any Exception.
         """
-        # threshold = 4
-        # array_C = (((array  * threshold).astype(np.int32)).astype(np.float) / threshold)
-        array_C = np.zeros(array.shape)
-        print(array.shape)
-        for i in range(0, array.shape[0]):
-            for j in range(0, array.shape[1]):
-                for k in range(0, array.shape[2]):
-                    pxl = array[i,j,k] / 255
-                    pxl_threshold = 0 if pxl >= 0   and pxl < 0.2 else \
-                                  0.2 if pxl >= 0.2 and pxl < 0.4 else \
-                                  0.4 if pxl >= 0.4 and pxl < 0.6 else \
-                                  0.6 if pxl >= 0.6 and pxl < 0.8 else 0.8
-                    array_C[i,j,k] = np.round(pxl_threshold * 256)
+        def pixel_to_celluloid(pixel):
+            pixel = pixel / 255
+            pxl_threshold = 0 if pixel >= 0   and pixel < 0.2 else \
+                          0.2 if pixel >= 0.2 and pixel < 0.4 else \
+                          0.4 if pixel >= 0.4 and pixel < 0.6 else \
+                          0.6 if pixel >= 0.6 and pixel < 0.8 else 0.8
+            return int(pxl_threshold * 255)
+
+        v_pixel_to_celluloid = np.vectorize(pixel_to_celluloid)
+        array_C = v_pixel_to_celluloid(array)
         return array_C
 
     def to_grayscale(array, filter, weights=None):
