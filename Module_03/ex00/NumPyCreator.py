@@ -6,6 +6,8 @@ class NumPyCreator():
         try:
             if type(lst) != list:
                 return None
+            if len(list(np.shape(lst))) == 1:
+                return np.array(lst)
             for l in lst:
                 if len(l) != len(lst[0]):
                     return None
