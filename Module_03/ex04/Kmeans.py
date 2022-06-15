@@ -76,7 +76,7 @@ class KmeansClustering:
             This function should not raise any Exception.
         """
         random_centroids = random.choices(data, k=self.ncentroid)
-        centroids = random_centroids
+        centroids = random_centroids.copy()
         for _ in range(self.max_iter):
             data_per_cluster = dict()
             for x in data:
