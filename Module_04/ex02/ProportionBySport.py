@@ -19,10 +19,13 @@ def proportionBySport(df, year, sport, gender):
         if not isinstance(gender, str):
             raise ValueError("Invalid gender value. Argument gender should be a string.")
         selected_year = df[df['Year'] == year]
+        if len(selected_year) == 0:
+            raise ValueError("No data for the provided year.")
         selected_gender = selected_year[selected_year['Sex'] == gender]
         selected_gender = selected_gender.drop_duplicates(['Name', 'Sport'])
         selected_sport = selected_gender[selected_gender['Sport'] == sport]
         proportion = len(selected_sport) / len(selected_gender)
+        return proportion
     except ValueError as e:
         print("Error: {}".format(e))
-    return proportion
+        return None
