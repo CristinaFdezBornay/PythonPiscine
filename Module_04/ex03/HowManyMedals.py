@@ -30,4 +30,4 @@ def howManyMedals(df, name):
 
     except ValueError as e:
         print("Error: {}".format(e))
-    return medals_dict
+        return None
