@@ -16,7 +16,7 @@ class FileLoader():
             return df
         except Exception as e:
             print("Could not read file located at '{}'. Please make sure it is a valid csv file.".format(path))
-            return pd.DataFrame({})
+            return None
 
     def display(self, df, n):
         """
@@ -29,9 +29,9 @@ class FileLoader():
             elif not isinstance(df, pd.DataFrame):
                 raise TypeError('Argument df must be a pandas DataFrame.')
             if n >= 0:
-                return df.head(n)
+                print(df.head(n))
             else:
-                return df.tail(-n)
+                print(df.tail(-n))
         except TypeError as e:
-            print("Error: ".format(e))
+            print("Error: {}".format(e))
             return
