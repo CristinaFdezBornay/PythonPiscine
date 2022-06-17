@@ -22,6 +22,7 @@ def youngestFellah(df, year):
         male_athletes = selected_year[selected_year['Sex'] == 'M']
         youngest_dict['f'] = female_athletes.min()['Age']
         youngest_dict['m'] = male_athletes.min()['Age']
+        return youngest_dict
     except ValueError as e:
         print("Error: {}".format(e))
-    return youngest_dict
+        return None
