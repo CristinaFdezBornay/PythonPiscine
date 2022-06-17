@@ -25,6 +25,7 @@ class SpatioTemporalData():
 
         except Exception as e:
             print("Error: {}".format(e))
+            return None
 
     def where(self, date):
         """
@@ -43,3 +44,4 @@ class SpatioTemporalData():
 
         except Exception as e:
             print("Error: {}".format(e))
+            return None

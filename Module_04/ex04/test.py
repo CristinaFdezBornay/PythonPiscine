@@ -1,21 +1,39 @@
-from FileLoader import FileLoader
-
-loader = FileLoader()
-data = loader.load('../data/athlete_events.csv')
-# Output
-# Loading dataset of dimensions 271116 x 15
 from SpatioTemporalData import SpatioTemporalData
-sp = SpatioTemporalData(data)
-print(sp.where(1896))
-# Output
-# ['Athina']
-print(sp.where(2016))
-# Output
-# ['Rio de Janeiro']
+try:
+    from FileLoader import FileLoader
+except:
+    print("Please import FileLoader from ex00")
 
-print(sp.when('Athina'))
-# Output
-# [2004, 1906, 1896]
-print(sp.when('Paris'))
-# Output
-# [1900, 1924]
+if __name__=="__main__":
+    try:
+        file = '../data/athlete_events.csv'
+        print(f"==> TESTING {file}")
+        loader = FileLoader()
+
+        print(f"\n=> Loading file")
+        data = loader.load(file)
+
+        sp = SpatioTemporalData(data)
+
+        print(f"\n=> Test correct where")
+        print(f"1896 : {sp.where(1896)}")
+        print(f"2016 : {sp.where(2016)}")
+
+        print(f"\n=> Test error where: no data for year")
+        print(f"1991 : {sp.where(1991)}")
+
+        print(f"\n=> Test error where: year None")
+        print(f"None : {sp.where(None)}")
+
+        print(f"\n=> Test correct when")
+        print(f"Athina : {sp.when('Athina')}")
+        print(f"Paris  : {sp.when('Paris')}")
+
+        print(f"\n=> Test error where: no data for location")
+        print(f"Madrid : {sp.when('Madrid')}")
+
+        print(f"\n=> Test error where: location None")
+        print(f"None   : {sp.when(None)}")
+
+    except Exception as e:
+        print(e)
