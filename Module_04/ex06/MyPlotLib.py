@@ -16,7 +16,7 @@ class MyPlotLib():
         """
         """
 
-    def _error_management_histogram(self, data, features):
+    def _error_management(self, data, features):
         if not isinstance(data, pd.DataFrame):
             raise TypeError("Invalid df value. Argument df should be a pandas.DataFrame object.")
         if not isinstance(features, list):
@@ -43,7 +43,7 @@ class MyPlotLib():
         """
 
         try:
-            self._error_management_histogram(data, features)
+            self._error_management(data, features)
             selected_features = self._select_features_histogram(data, features)
             if len(selected_features) == 0:
                 raise Exception("None of the provided features can be plotted as an histogram.")
@@ -66,7 +66,7 @@ class MyPlotLib():
         plots the density curve of each numerical feature in the list
         """
         try:
-            self._error_management_histogram(data, features)
+            self._error_management(data, features)
             selected_features = self._select_features_histogram(data, features)
             if len(selected_features) == 0:
                 raise Exception("None of the provided features can be plotted as an histogram.")
@@ -90,7 +90,7 @@ class MyPlotLib():
         The main diagonal of this matrix shows simple histograms.
         """
         try:
-            self._error_management_histogram(data, features)
+            self._error_management(data, features)
             selected_features = self._select_features_histogram(data, features)
             if len(selected_features) == 0:
                 raise Exception("None of the provided features can be plotted as an histogram.")
@@ -106,7 +106,7 @@ class MyPlotLib():
         displays a box plot for each numerical variable in the dataset.
         """
         try:
-            self._error_management_histogram(data, features)
+            self._error_management(data, features)
             selected_features = self._select_features_histogram(data, features)
             if len(selected_features) == 0:
                 raise Exception("None of the provided features can be plotted as an histogram.")
