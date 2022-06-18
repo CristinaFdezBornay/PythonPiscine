@@ -17,15 +17,25 @@ def howManyMedalsByCountry(df, country):
         medals_by_country = {}
         country_events = df[df['Team'] == country]
         country_events_by_year = country_events.groupby('Year')
+
         for year, event_df in country_events_by_year:
-            medals_by_country[year] = {'G': 0, 'S': 0, 'B': 0}
             event_df.dropna(subset=['Medal'], inplace=True)
             medals_type_by_country = event_df.groupby('Medal')
+            if len(medals_type_by_country) == 0:
+                continue
+            medals_by_country[year] = {'G': 0, 'S': 0, 'B': 0}
+
             for medal_type, events_by_medal_type in medals_type_by_country:
-                # print(medal_type)
                 medal_count = len(events_by_medal_type['Event'].unique())
                 if medal_type == 'Gold':
                     medals_by_country[year]['G'] = medal_count
+                elif medal_type == 'Silver':
+                    medals_by_country[year]['S'] = medal_count
+                elif medal_type == 'Bronze':
+                    medals_by_country[year]['B'] = medal_count
+
         return medals_by_country
+
     except Exception as e:
         print("Error: {}".format(e))
+        return None
