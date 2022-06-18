@@ -26,7 +26,7 @@ def howManyMedalsByCountry(df, country):
             medals_by_country[year] = {'G': 0, 'S': 0, 'B': 0}
 
             for medal_type, events_by_medal_type in medals_type_by_country:
-                medal_count = len(events_by_medal_type['Event'].unique())
+                medal_count = len(events_by_medal_type['Event'])
                 if medal_type == 'Gold':
                     medals_by_country[year]['G'] = medal_count
                 elif medal_type == 'Silver':
