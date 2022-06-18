@@ -112,7 +112,6 @@ class MyPlotLib():
                 raise Exception("None of the provided features can be plotted as an histogram.")
             plt.style.use('ggplot')
             selected_data = data[selected_features].dropna()
-            print(selected_data)
             seaborn.boxplot(data=selected_data)
             plt.show()
         except Exception as e:
